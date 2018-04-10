@@ -1,13 +1,19 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
  */
 public class TechJobs {
+
+    public static class mySort implements Comparator<HashMap<String,String>> {
+
+        @Override
+        public int compare(HashMap<String, String> map1, HashMap<String, String> map2) {
+            return map1.get("name").compareTo(map2.get("name"));
+        }
+    }
 
     private static Scanner in = new Scanner(System.in);
 
@@ -61,7 +67,7 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -111,6 +117,19 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+        Collections.sort(someJobs, new mySort());
+
+        for(int i = 0; i < someJobs.size(); i++)
+        {
+            System.out.println("*****");
+            for(Map.Entry<String,String> h : someJobs.get(i).entrySet()) {
+                System.out.println(h.getKey() + "   " + h.getValue());
+            }
+        }
+        System.out.println("*****");
+
+        if(someJobs.size() < 1)
+            System.out.println("No Jobs");
+
     }
 }
